@@ -99,8 +99,8 @@ export async function proxy(req: NextRequest) {
         ? NextResponse.redirect(new URL(LOGIN_PATH, req.url))
         : NextResponse.next();
 
-      response.cookies.delete('accessToken');
-      response.cookies.delete('refreshToken');
+      // response.cookies.delete('accessToken');
+      // response.cookies.delete('refreshToken');
 
       return response;
     } catch (error) {
@@ -114,8 +114,8 @@ export async function proxy(req: NextRequest) {
           new URL(LOGIN_PATH, req.url),
         );
 
-        response.cookies.delete('accessToken');
-        response.cookies.delete('refreshToken');
+        // response.cookies.delete('accessToken');
+        // response.cookies.delete('refreshToken');
 
         return response;
       }
