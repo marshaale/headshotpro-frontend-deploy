@@ -1,7 +1,7 @@
 export * from './server-auth';
 
 export function getUserDashboardPath(role: string): string {
-  if (role.toLowerCase().trim() === 'admin') {
+  if (role === 'admin') {
     return '/dashboard/admin';
   }
   return '/dashboard/user';
