@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { baseUrl } from './lib/api';
 import { parseSetCookie } from './lib/util';
 
-export async function middleware(req: NextRequest, res: NextResponse) {
+export async function proxy(req: NextRequest, res: NextResponse) {
   const { nextUrl } = req;
 
   // console.log('url', nextUrl);
