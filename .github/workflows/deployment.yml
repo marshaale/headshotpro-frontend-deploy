@@ -1,0 +1,60 @@
+name: CI Frontend to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create .env
+        run: |
+          cd "${{ github.workspace }}"
+          echo "${{ secrets.FRONTEND_ENV }}" > .env
+          chmod 600 .env
+          echo "Environment file created successfully"
+
+      - name: Install Bun
+        run: |
+          export PATH="$HOME/.bun/bin:$PATH"
+
+          if ! command -v bun >/dev/null 2>&1; then
+            echo "📦 Installing Bun..."
+            curl -fsSL https://bun.sh/install | bash
+            export PATH="$HOME/.bun/bin:$PATH"
+          fi
+
+          echo "Bun version:"
+          bun --version
+
+      - name: Install dependencies
+        run: |
+          export PATH="$HOME/.bun/bin:$PATH"
+          cd "${{ github.workspace }}"
+          bun install --frozen-lockfile
+
+      - name: Build Next.js Application
+        run: |
+          export PATH="$HOME/.bun/bin:$PATH"
+          cd "${{ github.workspace }}"
+          bun run build
+
+      - name: Restart Application
+        run: |
+          export PATH="$HOME/.bun/bin:$PATH"
+          cd "${{ github.workspace }}"
+
+          if pm2 describe frontend >/dev/null 2>&1; then
+            pm2 restart frontend
+          else
+            pm2 start "bun run start" \
+              --name frontend
+          fi
+
+          pm2 save
