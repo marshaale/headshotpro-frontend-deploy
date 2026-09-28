@@ -61,6 +61,7 @@ export async function proxy(req: NextRequest) {
               ...(cookie.attributes.Path && {
                 path: cookie.attributes.Path,
               }),
+              domain: cookie.attributes.domain || '.sotechho.com',
               ...(cookie.attributes.Expires && {
                 expires: new Date(cookie.attributes.Expires),
               }),
